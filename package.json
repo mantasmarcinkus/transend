@@ -1,0 +1,38 @@
+{
+  "name": "transend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "wp": "webpack & node ./dist/bundle.js",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "node --nolazy --debug-brk=5858 index.js",
+    "register": "node ./src/modules/google_register.js",
+    "reset": "node ./src/modules/commands/reset"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-env": "^1.2.2",
+    "coffee-loader": "^0.7.3",
+    "eslint": "^3.15.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.9.0",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.4.2"
+  },
+  "dependencies": {
+    "config": "^1.25.1",
+    "google-auth-library": "^0.10.0",
+    "googleapis": "^18.0.0",
+    "json-object-stream": "^0.1.1",
+    "node-notifier": "^5.1.2",
+    "node-windows": "^0.1.14",
+    "opn": "^4.0.2"
+  }
+}
