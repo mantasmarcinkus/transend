@@ -1,20 +1,23 @@
 const api = require('./src/modules/google_authorization');
 const service = require('./src/modules');
+const google = require('googleapis');
+const EventLogger = require('node-windows').EventLogger;
+
+const log = new EventLogger('transend');
 
 function work(auth) {
-  service.notifyAboutLinks(auth);
-  //service.addConfig(auth);
-  //service.deleteAllAppFiles(auth);
-  // api.addFolder(auth);
-  // setInterval(function () {
-  //   api.listAppFiles(auth);
-  // }, 5000);
+  const drive = google.drive('v3');
+  setInterval(() => {
+    try {
+      service.notifyAboutLinks(drive, auth);
+    } catch (e) {
+      log.error(e);
+    }
+  }, 10000);
 }
 
 try {
-  console.log('Starting');
   api.init(work);
-  console.log('Logged in');
 } catch (e) {
-  console.log(e);
+  log.error(e);
 }

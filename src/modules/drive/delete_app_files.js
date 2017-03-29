@@ -1,12 +1,15 @@
 module.exports = function deleteFile(fileId, drive, auth) {
-  drive.files.delete({
-    auth,
-    fileId,
-  }, (err) => {
-    if (err) {
+  return new Promise((resolve) => {
+    drive.files.delete({
+      auth,
+      fileId,
+    }, (err) => {
+      if (!err) {
+        console.log(`${fileId} deleted`);
+        resolve(fileId);
+      }
+
       console.log(err);
-    } else {
-      console.log(`${fileId} deleted`);
-    }
+    });
   });
 };

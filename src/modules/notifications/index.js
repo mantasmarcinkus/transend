@@ -20,6 +20,8 @@ module.exports = function notify(fileId, drive, auth, callback) {
         if (callback && !link.read) { callback(link); }
         links.push({
           value: link.value,
+          author: link.author,
+          date: link.date,
           read: true,
         });
       });

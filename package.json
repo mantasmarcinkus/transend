@@ -9,7 +9,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "debug": "node --nolazy --debug-brk=5858 index.js",
     "register": "node ./src/modules/google_register.js",
-    "reset": "node ./src/modules/commands/reset"
+    "install-service": "node ./install.js",
+    "uninstall-service": "node ./uninstall.js",
+    "reset": "node reset.js"
   },
   "author": "",
   "license": "MIT",

@@ -1,5 +1,8 @@
 const fs = require('fs');
 const GoogleAuth = require('google-auth-library');
+const EventLogger = require('node-windows').EventLogger;
+
+const log = new EventLogger('transend');
 
 const TOKEN_DIR = `${process.env.HOME || process.env.HOMEPATH ||
   process.env.USERPROFILE}/.credentials/`;
@@ -22,7 +25,7 @@ function authorize(credentials, callback) {
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, (err, token) => {
     if (err) {
-      console.log('Token is not registered. Please run command: npm run register');
+      log.error('Token is not registered. Please run command: npm run register');
     } else {
       oauth2Client.credentials = JSON.parse(token);
       callback(oauth2Client);
@@ -31,11 +34,10 @@ function authorize(credentials, callback) {
 }
 
 function init(callback) {
-  // authorize(app_settings, listFiles);
   // Load client secrets from a local file.
   fs.readFile(CLIENT_SECRET, (err, content) => {
     if (err) {
-      console.log(`Error loading client secret file: ${err}`);
+      log.error(`Error loading client secret file: ${err}`);
       return;
     }
     // Authorize a client with the loaded credentials, then call the

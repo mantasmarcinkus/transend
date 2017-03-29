@@ -1,4 +1,3 @@
-const google = require('googleapis');
 const listFiles = require('./drive/list_files');
 const downloadFile = require('./drive/download_file');
 const listAppFiles = require('./drive/list_app_files');
@@ -6,99 +5,60 @@ const addFolder = require('./drive/add_folder');
 const addConfig = require('./drive/add_config');
 const deleteFile = require('./drive/delete_app_files');
 const updateFile = require('./drive/update_file');
-const notify = require('./notifications');
-const config = require('config');
 const notifier = require('./notifications/notifier_wrapper');
-
-const DB_NAME = config.get('dbConfig.name');
+const getDatabaseFile = require('../utils/DbUtils');
 
 /**
  * Get config if it's not there create it!
  * @param {*} auth
  */
-function checkConfigFile(auth) {
-  const drive = google.drive('v3');
-  drive.files.list({
-    auth,
-    spaces: 'appDataFolder',
-    fields: 'nextPageToken, files(id, name)',
-    pageSize: 100,
-  }, (err, res) => {
-    if (!err) {
-      if (res.files.length > 0) {
-        let exists = false;
-        res.files.forEach((file) => {
-          if (file.name === DB_NAME) {
-            console.log('Found file: ', file.name, file.id);
-            exists = true;
-            downloadFile(file.id, drive, auth, notifier);
-          }
-        });
-
-        if (!exists) {
-          console.log('DB file does not exist!');
-        }
-      } else {
-        console.log('DB file does not exist!');
-        // TO DO: do we really need the config addition?
-        // addConfig(auth);
-      }
-    } else {
-      console.log(err);
-    }
-  });
+function checkConfigFile(service, auth) {
+  listAppFiles(service, auth)
+    .then(files => getDatabaseFile(files))
+    .then(file => downloadFile(file.id, service, auth))
+    .then(stream => JSON.parse(stream))
+    .then(object => object.links.forEach(notifier));
 }
 
 /**
  * Notification about not read links in drive app data
  * @param {*} auth
  */
-function notifyAboutLinks(auth) {
-  const drive = google.drive('v3');
-  drive.files.list({
-    auth,
-    spaces: 'appDataFolder',
-    fields: 'nextPageToken, files(id, name)',
-    pageSize: 100,
-  }, (err, res) => {
-    if (!err) {
-      if (res.files.length > 0) {
-        let exists = false;
-        res.files.forEach((file) => {
-          if (file.name === DB_NAME) {
-            console.log('Found file: ', file.name, file.id);
-            exists = true;
-            notify(file.id, drive, auth, notifier);
-          }
-        });
+function notifyAboutLinks(service, auth) {
+  let fileId;
+  listAppFiles(service, auth)
+    .then(res => getDatabaseFile(res))
+    .then(file => new Promise((resolve) => {
+      fileId = file.id;
+      const stream = downloadFile(file.id, service, auth);
+      resolve(stream);
+    }))
+    .then(stream => JSON.parse(stream))
+    .then((object) => {
+      const links = [];
 
-        if (!exists) {
-          console.log('DB file does not exist!');
-        }
-      } else {
-        console.log('DB file does not exist!');
-        // TO DO: do we really need the config addition?
-        // addConfig(auth);
-      }
-    } else {
-      console.log(err);
-    }
-  });
+      // Notify all not read links
+      // Mark all the links read afterwards
+      object.links.forEach((link) => {
+        if (!link.read) { notifier(link); }
+        links.push({
+          value: link.value,
+          author: link.author,
+          date: link.date,
+          read: true,
+        });
+      });
+      updateFile(fileId, service, auth, JSON.stringify(Object.assign({}, object, { links })));
+    });
 }
 
 /**
  * Deletes all the files in app data folder
  * @param {*} auth
  */
-function deleteAllAppFiles(auth) {
-  const drive = google.drive('v3');
-  drive.files.list({
-    auth,
-    spaces: 'appDataFolder',
-    fields: 'nextPageToken, files(id, name)',
-    pageSize: 100,
-  }, (err, res) => {
-    if (!err) {
+function deleteAllAppFiles(drive, auth) {
+  listAppFiles(drive, auth)
+    .then((res) => {
       if (res.files.length > 0) {
         res.files.forEach((file) => {
           deleteFile(file.id, drive, auth);
@@ -107,10 +67,7 @@ function deleteAllAppFiles(auth) {
       } else {
         console.log('No files to delete!');
       }
-    } else {
-      console.log(err);
-    }
-  });
+    });
 }
 
 module.exports = {
