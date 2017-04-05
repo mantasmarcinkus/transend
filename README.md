@@ -18,11 +18,11 @@ Run these commands:
 
 ## Stack
 
-| System   |   Technology  |  Status |
-|----------|---------------|---------|
-| Windows Service |  Node.js  |  |
-| Data storage | Google Drive (AppSettings)  |  |
-| Mobile app | React native |   TO DO |
-| Web app (Client) | React, Vuejs | TO DO |
-| Web app (Server) | Node.js, .NET Core | TO DO |
+| System   |   Technology  |  Status | Rewrites |
+|----------|---------------|---------|----------|
+| Windows Service |  [Node.js](https://github.com/nodejs)  |  |
+| Data storage | [Google Drive (AppData)](https://developers.google.com/drive/v3/web/appdata)  |  |  |
+| Mobile app | [React native](https://facebook.github.io/react-native) |   TO DO |  |
+| Web app (Client) | [React](https://facebook.github.io/react), [Vuejs](https://github.com/vuejs) | TO DO |  |
+| Web app (Server) | [Node.js](https://github.com/nodejs), [.NET Core](https://github.com/dotnet/core) | TO DO |  |
 
