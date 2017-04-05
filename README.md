@@ -20,8 +20,8 @@ Run these commands:
 
 | System   |   Technology  |  Status | Rewrites |
 |----------|---------------|---------|----------|
-| Windows Service |  [Node.js](https://github.com/nodejs)  |  |
-| Data storage | [Google Drive (AppData)](https://developers.google.com/drive/v3/web/appdata)  |  |  |
+| Windows Service |  [Node.js](https://github.com/nodejs)  | Done (for now) |
+| Data storage | [Google Drive (AppData)](https://developers.google.com/drive/v3/web/appdata)  | Done (for now)  |  |
 | Mobile app | [React native](https://facebook.github.io/react-native) |   TO DO |  |
 | Web app (Client) | [React](https://facebook.github.io/react), [Vuejs](https://github.com/vuejs) | TO DO |  |
 | Web app (Server) | [Node.js](https://github.com/nodejs), [.NET Core](https://github.com/dotnet/core) | TO DO |  |
