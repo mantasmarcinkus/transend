@@ -7,7 +7,7 @@ Note: I haven't looked for application that can do it, because I wanted to do it
 ## How to run
 To jump start this project I used this:  
 [https://developers.google.com/drive/v3/web/quickstart/nodejs](https://developers.google.com/drive/v3/web/quickstart/nodejs)  
-- **client_secret.json** should be obtained :exclamation:  
+- **client_secret.json** must be obtained :exclamation:  
 Run these commands: 
 - `npm run register` in the console, copy the url to browser and then paste authentication token to console
 - `npm run reset` will reset the database file with a fake test notification
